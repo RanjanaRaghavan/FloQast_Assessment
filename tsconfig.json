@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* Language & module target — Node 20+ / ESM */
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Strictness — a QA framework should hold itself to a high bar */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type-check only — tsx executes the TS directly, tsc never emits */
+    "noEmit": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+
+    "types": ["node"]
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts",
+    "mock-services/**/*.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", "test-results", "playwright-report", "reports"]
+}
