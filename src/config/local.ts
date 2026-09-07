@@ -9,7 +9,7 @@ const PORT = 4010;
  */
 export const localConfig: EnvProfileInput = {
   apiBaseURL: `http://localhost:${PORT}`,
-  uiBaseURL: `http://localhost:${PORT}/app`,
+  uiBaseURL: `http://localhost:${PORT}/app/`,
   mockServerPort: PORT,
 
   testTimeoutMs: 30000,

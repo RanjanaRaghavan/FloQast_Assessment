@@ -13,6 +13,7 @@ const isCI = !!process.env.CI;
 export default defineConfig({
   testDir: './tests',
   outputDir: './test-results',
+  globalSetup: './src/global-setup.ts',
 
   // Fail the run if a `test.only` was committed by accident.
   forbidOnly: isCI,

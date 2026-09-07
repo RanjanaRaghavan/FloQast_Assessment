@@ -15,7 +15,7 @@ import type { EnvProfileInput } from './env';
  */
 export const stagingConfig: EnvProfileInput = {
   apiBaseURL: 'https://api.staging.example.com',
-  uiBaseURL: 'https://app.staging.example.com',
+  uiBaseURL: 'https://app.staging.example.com/',
   mockServerPort: 0, // unused — nothing is booted locally
 
   testTimeoutMs: 60000,
