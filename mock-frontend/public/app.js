@@ -116,7 +116,9 @@
   function showError(err) {
     var text = 'Something went wrong';
     if (err && Array.isArray(err.details) && err.details.length) {
-      text = String(err.details[0]).replace(/^[\w.]+:\s*/, '');
+      var detail = String(err.details[0]);
+      var parts = detail.match(/^([A-Za-z][\w.]*):\s*(.+)$/);
+      text = parts ? capitalize(parts[1]) + ' ' + parts[2] : detail;
     } else if (err && err.message) {
       text = err.message;
     }
