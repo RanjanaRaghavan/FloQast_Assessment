@@ -37,7 +37,7 @@ export interface EventBusOptions {
    * Keeping a real (small, jittered) delay here forces the test suite to prove
    * it handles eventual consistency properly: poll with a timeout, and assert
    * *absence* only after the full budget has elapsed. See
-   * `tests/contract/notification.async.spec.ts` and `src/helpers/poll.ts`.
+   * `tests/notification/delivery.spec.ts` and `src/helpers/poll.ts`.
    */
   delayMs: number;
 

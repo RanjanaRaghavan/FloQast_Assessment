@@ -2,7 +2,7 @@
   "name": "floqast-assessment",
   "version": "1.0.0",
   "private": true,
-  "description": "Test automation framework for a fintech microservices architecture: API, UI, and contract tests running against mock services.",
+  "description": "Test automation framework for a fintech microservices architecture: API, UI, and async notification tests running against mock services.",
   "type": "module",
   "engines": {
     "node": ">=20"
@@ -13,7 +13,7 @@
     "pretest": "playwright install --with-deps chromium",
     "test": "playwright test",
     "test:api": "playwright test --project=api",
-    "test:contract": "playwright test --project=contract",
+    "test:notification": "playwright test --project=notification",
     "test:ui": "playwright test --project=ui",
     "test:smoke": "playwright test --grep @p0",
     "report": "playwright show-report",

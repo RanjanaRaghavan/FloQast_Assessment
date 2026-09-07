@@ -7,7 +7,7 @@ import type { EventBus } from './event-bus';
  * `transaction.completed` on the event bus and writes a notification record per
  * recipient. Because the bus delivers with a deliberate delay, a notification
  * appears *after* the originating POST /api/transactions has already returned —
- * which is exactly what the async contract tests exercise.
+ * which is exactly what the async notification tests exercise.
  */
 
 export type NotificationKind =

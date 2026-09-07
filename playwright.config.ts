@@ -57,8 +57,8 @@ export default defineConfig({
       use: { baseURL: env.apiBaseURL },
     },
     {
-      name: 'contract',
-      testDir: './tests/contract',
+      name: 'notification',
+      testDir: './tests/notification',
       use: { baseURL: env.apiBaseURL },
     },
     {
