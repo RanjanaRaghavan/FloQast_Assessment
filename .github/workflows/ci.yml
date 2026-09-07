@@ -38,14 +38,6 @@ jobs:
         # globalSetup then resets it. No services to stand up here.
         run: npx playwright test
 
-      - name: Publish test results
-        if: always()
-        uses: mikepenz/action-junit-report@v5
-        with:
-          report_paths: reports/junit.xml
-          check_name: Test results
-          fail_on_failure: false
-
       - name: Upload report and failure artifacts
         if: always()
         uses: actions/upload-artifact@v4

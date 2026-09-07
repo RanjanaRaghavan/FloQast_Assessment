@@ -112,6 +112,6 @@ tests/
 ## CI
 
 `.github/workflows/ci.yml` runs one job: install, run every project with
-`TEST_ENV=ci`, publish the JUnit result to the PR, and upload the report and
-failure artifacts. The Node version comes from `.nvmrc` via `node-version-file`,
-so CI and local never drift.
+`TEST_ENV=ci`, and upload the report (HTML, JUnit, JSON) plus failure artifacts.
+The Node version comes from `.nvmrc` via `node-version-file`, so CI and local
+never drift.

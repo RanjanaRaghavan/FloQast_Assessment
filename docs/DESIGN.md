@@ -235,6 +235,6 @@ by zod at startup, so a bad value fails before any test runs.
 ## 5. CI
 
 `.github/workflows/ci.yml` is one job: checkout, Node from `.nvmrc`, `npm ci`,
-install Chromium, `npx playwright test` with `TEST_ENV=ci`, publish the JUnit
-result to the pull request, and upload the report plus failure artifacts. The
-mock stack is booted by Playwright's `webServer`, so there is nothing to stand up.
+install Chromium, `npx playwright test` with `TEST_ENV=ci`, and upload the report
+(HTML, JUnit, JSON) plus failure artifacts. The mock stack is booted by
+Playwright's `webServer`, so there is nothing to stand up.
