@@ -99,7 +99,10 @@ export function createApp(config: EnvConfig): Express {
     const { email } = parseBody(loginSchema, req.body);
     const user = ledger.getUserByEmail(email);
     if (!user) throw new DomainError('NOT_FOUND', `No user with email "${email}"`);
-    res.json({ token: auth.issueToken({ id: user.id, email: user.email }) });
+    res.json({
+      token: auth.issueToken({ id: user.id, email: user.email }),
+      user: serializeUser(user),
+    });
   });
 
   // --- Users ---------------------------------------------------------------

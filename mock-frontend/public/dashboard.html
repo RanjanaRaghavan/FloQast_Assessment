@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboard · FloQast Pay (mock)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="card wide">
+      <div class="row">
+        <div>
+          <h1 data-testid="greeting">Welcome</h1>
+          <p class="muted" data-testid="account-type"></p>
+        </div>
+        <button type="button" data-testid="sign-out" style="margin: 0; background: transparent; color: var(--primary)">
+          Sign out
+        </button>
+      </div>
+
+      <div id="form-error" class="alert" role="alert" data-testid="form-error" hidden></div>
+
+      <h2>Balance</h2>
+      <p class="balance" data-testid="balance">—</p>
+
+      <h2>Recent transactions</h2>
+      <div id="history"></div>
+
+      <a href="./transaction.html" data-testid="to-new-transaction">
+        <button type="button">New transaction</button>
+      </a>
+    </main>
+
+    <script src="./app.js"></script>
+    <script>
+      App.onReady(async () => {
+        const session = App.requireSession(); // redirects to login.html if absent
+        if (!session) return;
+
+        App.setText('[data-testid="greeting"]', `Hi, ${session.user.name}`);
+        App.setText('[data-testid="account-type"]', `${session.user.accountType} account`);
+
+        document.querySelector('[data-testid="sign-out"]').addEventListener('click', () => {
+          App.clearSession();
+          window.location.assign('./login.html');
+        });
+
+        try {
+          const user = await App.api('GET', `/api/users/${session.user.id}`);
+          App.setSession(session.token, user);
+          App.setText('[data-testid="balance"]', App.money(user.balance, 'USD'));
+
+          const txns = await App.api('GET', `/api/transactions/${user.id}`);
+          App.renderHistory(document.getElementById('history'), txns, user.id);
+        } catch (err) {
+          App.showError(err);
+        }
+      });
+    </script>
+  </body>
+</html>

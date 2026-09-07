@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register · FloQast Pay (mock)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <h1>Create your account</h1>
+      <p class="muted">Mock frontend for the test automation assessment.</p>
+
+      <div id="form-error" class="alert" role="alert" data-testid="form-error" hidden></div>
+
+      <form id="register-form" novalidate>
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" autocomplete="name" required />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+
+        <label for="accountType">Account type</label>
+        <select id="accountType" name="accountType">
+          <option value="free">Free</option>
+          <option value="premium">Premium</option>
+        </select>
+
+        <button type="submit" data-testid="register-submit">Create account</button>
+      </form>
+
+      <p class="muted">
+        Already have an account?
+        <a href="./login.html" data-testid="to-login">Sign in</a>
+      </p>
+    </main>
+
+    <script src="./app.js"></script>
+    <script>
+      App.onReady(() => {
+        const form = document.getElementById('register-form');
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          App.clearError();
+          App.setBusy(form, true);
+
+          const payload = {
+            name: form.name.value.trim(),
+            email: form.email.value.trim(),
+            accountType: form.accountType.value,
+          };
+
+          try {
+            const user = await App.api('POST', '/api/users', payload);
+            const { token } = await App.api('POST', '/api/auth/login', { email: user.email });
+            App.setSession(token, user);
+            window.location.assign('./dashboard.html');
+          } catch (err) {
+            App.showError(err);
+            App.setBusy(form, false);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>New transaction · FloQast Pay (mock)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <div class="row">
+        <h1>New transaction</h1>
+        <a href="./dashboard.html" data-testid="to-dashboard" class="muted">Back</a>
+      </div>
+
+      <p class="muted">
+        Your balance: <span data-testid="balance">—</span>
+      </p>
+
+      <div id="form-error" class="alert" role="alert" data-testid="form-error" hidden></div>
+      <div id="form-success" class="alert success" role="status" data-testid="form-success" hidden></div>
+
+      <form id="transaction-form" novalidate>
+        <label for="type">Transaction type</label>
+        <select id="type" name="type">
+          <option value="transfer">Transfer</option>
+          <option value="deposit">Deposit</option>
+          <option value="withdrawal">Withdrawal</option>
+        </select>
+
+        <label for="recipientId">Recipient user ID</label>
+        <input id="recipientId" name="recipientId" type="text" autocomplete="off" />
+
+        <label for="amount">Amount (USD)</label>
+        <input id="amount" name="amount" type="text" inputmode="decimal" autocomplete="off" required />
+
+        <button type="submit" data-testid="txn-submit">Send</button>
+      </form>
+    </main>
+
+    <script src="./app.js"></script>
+    <script>
+      App.onReady(async () => {
+        const session = App.requireSession();
+        if (!session) return;
+
+        const form = document.getElementById('transaction-form');
+        const recipientField = document.getElementById('recipientId');
+
+        const syncRecipientState = () => {
+          recipientField.disabled = form.type.value !== 'transfer';
+        };
+        form.type.addEventListener('change', syncRecipientState);
+        syncRecipientState();
+
+        try {
+          const user = await App.api('GET', `/api/users/${session.user.id}`);
+          App.setSession(session.token, user);
+          App.setText('[data-testid="balance"]', App.money(user.balance, 'USD'));
+        } catch (err) {
+          App.showError(err);
+        }
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          App.clearError();
+          App.clearSuccess();
+
+          const raw = form.amount.value.trim();
+          const amount = Number(raw);
+          if (raw === '' || Number.isNaN(amount)) {
+            App.showMessage('Amount must be a number');
+            return;
+          }
+          if (amount <= 0) {
+            App.showMessage('Amount must be greater than 0');
+            return;
+          }
+
+          const payload = { type: form.type.value, amount };
+          if (form.type.value === 'transfer') payload.recipientId = form.recipientId.value.trim();
+
+          App.setBusy(form, true);
+          try {
+            const txn = await App.api('POST', '/api/transactions', payload);
+            App.showSuccess(`${txn.type} of ${App.money(txn.amount, txn.currency)} completed`);
+            form.reset();
+            syncRecipientState();
+          } catch (err) {
+            App.showError(err);
+          } finally {
+            App.setBusy(form, false);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

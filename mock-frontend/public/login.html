@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in · FloQast Pay (mock)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <h1>Sign in</h1>
+      <p class="muted">Enter the email you registered with.</p>
+
+      <div id="form-error" class="alert" role="alert" data-testid="form-error" hidden></div>
+
+      <form id="login-form" novalidate>
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+
+        <button type="submit" data-testid="login-submit">Sign in</button>
+      </form>
+
+      <p class="muted">
+        Need an account?
+        <a href="./index.html" data-testid="to-register">Create one</a>
+      </p>
+    </main>
+
+    <script src="./app.js"></script>
+    <script>
+      App.onReady(() => {
+        const form = document.getElementById('login-form');
+
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          App.clearError();
+          App.setBusy(form, true);
+
+          try {
+            const { token, user } = await App.api('POST', '/api/auth/login', {
+              email: form.email.value.trim(),
+            });
+            App.setSession(token, user);
+            window.location.assign('./dashboard.html');
+          } catch (err) {
+            App.showError(err);
+            App.setBusy(form, false);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
